@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "mx-sdk-erdpy-wallet"
+name = "mx-sdk-erdpy-network-providers"
 version = "0.4.1"
 authors = [
   { name="MultiversX" },
@@ -18,4 +18,4 @@ dependencies = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/multiversx/mx-sdk-py-wallet"
+"Homepage" = "https://github.com/multiversx/mx-sdk-py-network-providers"

@@ -3,8 +3,8 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "mxpy"
-version = "5.1.0"
+name = "multiversx"
+version = "0.1.0"
 authors = [
   { name="MultiversX" },
 ]
@@ -18,4 +18,4 @@ dependencies = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/multiversx/mx-sdk-py-cli"
+"Homepage" = "https://github.com/multiversx"

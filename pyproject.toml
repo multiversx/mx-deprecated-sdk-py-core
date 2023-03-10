@@ -9,7 +9,7 @@ authors = [
   { name="MultiversX" },
 ]
 license = "MIT"
-description = "Reserved moved (renamed) to multiversx-sdk-cli"
+description = "Package moved (renamed) to multiversx-sdk-cli"
 readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [

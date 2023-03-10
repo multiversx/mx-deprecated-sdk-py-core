@@ -3,13 +3,13 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "multiversx-sdk"
-version = "0.1.0"
+name = "erdpy"
+version = "5.0.0"
 authors = [
   { name="MultiversX" },
 ]
 license = "MIT"
-description = "Reserved package name"
+description = "Reserved moved (renamed) to multiversx-sdk-cli"
 readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [

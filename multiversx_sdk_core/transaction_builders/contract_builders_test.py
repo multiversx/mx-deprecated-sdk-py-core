@@ -2,8 +2,8 @@ from typing import List
 
 from multiversx_sdk_core.address import Address
 from multiversx_sdk_core.code_metadata import CodeMetadata
-from multiversx_sdk_core.interfaces import ITokenPayment
-from multiversx_sdk_core.token_payment import TokenPayment
+from multiversx_sdk_core.interfaces import ITokenTransfer
+from multiversx_sdk_core.token_transfer import TokenTransfer
 from multiversx_sdk_core.transaction_builders.contract_builders import (
     ContractCallBuilder, ContractDeploymentBuilder, ContractUpgradeBuilder)
 from multiversx_sdk_core.transaction_builders.default_configuration import \
@@ -91,8 +91,8 @@ def test_contract_call_builder_with_esdt_transfer():
     contract = Address.from_bech32("erd1qqqqqqqqqqqqqpgquzmh78klkqwt0p4rjys0qtp3la07gz4d396qn50nnm")
     caller = Address.from_bech32("erd1k2s324ww2g0yj38qn2ch2jwctdy8mnfxep94q9arncc6xecg3xaq6mjse8")
 
-    transfers: List[ITokenPayment] = [
-        TokenPayment.fungible_from_amount("COUNTER-8b028f", "100.00", 2)
+    transfers: List[ITokenTransfer] = [
+        TokenTransfer.of_fungible("COUNTER-8b028f", 10000)
     ]
 
     builder = ContractCallBuilder(
@@ -118,8 +118,8 @@ def test_contract_call_builder_with_esdt_nft_transfer():
     contract = Address.from_bech32("erd1qqqqqqqqqqqqqpgquzmh78klkqwt0p4rjys0qtp3la07gz4d396qn50nnm")
     caller = Address.from_bech32("erd1k2s324ww2g0yj38qn2ch2jwctdy8mnfxep94q9arncc6xecg3xaq6mjse8")
 
-    transfers: List[ITokenPayment] = [
-        TokenPayment.non_fungible("TEST-38f249", 1)
+    transfers: List[ITokenTransfer] = [
+        TokenTransfer.of_non_fungible("TEST-38f249", 1)
     ]
 
     builder = ContractCallBuilder(
@@ -146,8 +146,8 @@ def test_contract_call_builder_with_multi_esdt_nft_transfer():
     caller = Address.from_bech32("erd1k2s324ww2g0yj38qn2ch2jwctdy8mnfxep94q9arncc6xecg3xaq6mjse8")
 
     transfers = [
-        TokenPayment.non_fungible("TEST-38f249", 1),
-        TokenPayment.fungible_from_amount("BAR-c80d29", "10.00", 18)
+        TokenTransfer.of_non_fungible("TEST-38f249", 1),
+        TokenTransfer.of_fungible("BAR-c80d29", 10000000000000000000)
     ]
 
     builder = ContractCallBuilder(

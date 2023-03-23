@@ -2,7 +2,7 @@ from typing import Any, List, Optional, Protocol, Sequence
 
 from multiversx_sdk_core.constants import VM_TYPE_WASM_VM
 from multiversx_sdk_core.interfaces import (IAddress, ICodeMetadata, IGasLimit,
-                                            IGasPrice, INonce, ITokenPayment,
+                                            IGasPrice, INonce, ITokenTransfer,
                                             ITransactionValue)
 from multiversx_sdk_core.serializer import arg_to_string, args_to_strings
 from multiversx_sdk_core.transaction_builders.transaction_builder import (
@@ -78,7 +78,7 @@ class ContractCallBuilder(TransactionBuilder):
                  caller: IAddress,
                  nonce: Optional[INonce] = None,
                  value: Optional[ITransactionValue] = None,
-                 esdt_transfers: Sequence[ITokenPayment] = [],
+                 esdt_transfers: Sequence[ITokenTransfer] = [],
                  gas_limit: Optional[IGasLimit] = None,
                  gas_price: Optional[IGasPrice] = None
                  ) -> None:
@@ -104,7 +104,7 @@ class ContractCallBuilder(TransactionBuilder):
             parts = [
                 "ESDTTransfer",
                 arg_to_string(transfer.token_identifier),
-                arg_to_string(transfer.amount_as_integer),
+                arg_to_string(transfer.amount_in_atomic_unit),
                 arg_to_string(self.function_name),
                 *args_to_strings(self.call_arguments)
             ]
@@ -114,7 +114,7 @@ class ContractCallBuilder(TransactionBuilder):
                 "ESDTNFTTransfer",
                 arg_to_string(transfer.token_identifier),
                 arg_to_string(transfer.token_nonce),
-                arg_to_string(transfer.amount_as_integer),
+                arg_to_string(transfer.amount_in_atomic_unit),
                 arg_to_string(self.contract),
                 arg_to_string(self.function_name),
                 *args_to_strings(self.call_arguments)
@@ -130,7 +130,7 @@ class ContractCallBuilder(TransactionBuilder):
                 parts.extend([
                     arg_to_string(transfer.token_identifier),
                     arg_to_string(transfer.token_nonce),
-                    arg_to_string(transfer.amount_as_integer)
+                    arg_to_string(transfer.amount_in_atomic_unit)
                 ])
 
             parts.extend([

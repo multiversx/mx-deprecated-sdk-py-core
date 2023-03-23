@@ -1,4 +1,3 @@
-
 from typing import Protocol
 
 
@@ -16,10 +15,10 @@ ISignature = bytes
 ITokenIdentifier = str
 
 
-class ITokenPayment(Protocol):
+class ITokenTransfer(Protocol):
     token_identifier: ITokenIdentifier
     token_nonce: INonce
-    amount_as_integer: int
+    amount_in_atomic_unit: int
 
     def is_egld(self) -> bool: ...
     def is_fungible(self) -> bool: ...

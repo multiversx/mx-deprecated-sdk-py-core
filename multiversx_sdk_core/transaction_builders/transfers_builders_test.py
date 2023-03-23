@@ -1,6 +1,6 @@
 
 from multiversx_sdk_core.address import Address
-from multiversx_sdk_core.token_payment import TokenPayment
+from multiversx_sdk_core.token_transfer import TokenTransfer
 from multiversx_sdk_core.transaction_builders.default_configuration import \
     DefaultTransactionBuildersConfiguration
 from multiversx_sdk_core.transaction_builders.transfers_builders import (
@@ -13,14 +13,14 @@ dummyConfig = DefaultTransactionBuildersConfiguration(chain_id="D")
 def test_egld_transfer_builder():
     alice = Address.from_bech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th")
     bob = Address.from_bech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx")
-    payment = TokenPayment.egld_from_amount("1.00")
+    transfer = TokenTransfer.of_egld(1000000000000000000)
 
     # With "data" field
     builder = EGLDTransferBuilder(
         config=dummyConfig,
         sender=alice,
         receiver=bob,
-        payment=payment,
+        transfer=transfer,
         data="for the book"
     )
 
@@ -38,7 +38,7 @@ def test_egld_transfer_builder():
         config=dummyConfig,
         sender=alice,
         receiver=bob,
-        payment=payment
+        transfer=transfer
     )
 
     payload = builder.build_payload()
@@ -54,13 +54,13 @@ def test_egld_transfer_builder():
 def test_esdt_transfer_builder():
     alice = Address.from_bech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th")
     bob = Address.from_bech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx")
-    payment = TokenPayment.fungible_from_amount("COUNTER-8b028f", "100.00", 2)
+    transfer = TokenTransfer.of_fungible("COUNTER-8b028f", 10000)
 
     builder = ESDTTransferBuilder(
         config=dummyConfig,
         sender=alice,
         receiver=bob,
-        payment=payment
+        transfer=transfer
     )
 
     payload = builder.build_payload()
@@ -76,13 +76,13 @@ def test_esdt_transfer_builder():
 def test_esdt_nft_transfer_builder():
     alice = Address.from_bech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th")
     bob = Address.from_bech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx")
-    payment = TokenPayment.non_fungible("TEST-38f249", 1)
+    transfer = TokenTransfer.of_non_fungible("TEST-38f249", 1)
 
     builder = ESDTNFTTransferBuilder(
         config=dummyConfig,
         sender=alice,
         destination=bob,
-        payment=payment
+        transfer=transfer
     )
 
     payload = builder.build_payload()
@@ -99,14 +99,14 @@ def test_multi_esdt_nft_transfer_builder():
     alice = Address.from_bech32("erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th")
     bob = Address.from_bech32("erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx")
 
-    payment_one = TokenPayment.non_fungible("TEST-38f249", 1)
-    payment_two = TokenPayment.fungible_from_amount("BAR-c80d29", "10.00", 18)
+    transfer_one = TokenTransfer.of_non_fungible("TEST-38f249", 1)
+    transfer_two = TokenTransfer.of_fungible("BAR-c80d29", 10000000000000000000)
 
     builder = MultiESDTNFTTransferBuilder(
         config=dummyConfig,
         sender=alice,
         destination=bob,
-        payments=[payment_one, payment_two]
+        transfers=[transfer_one, transfer_two]
     )
 
     payload = builder.build_payload()

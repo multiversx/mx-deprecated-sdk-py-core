@@ -1,6 +1,6 @@
 
 from multiversx_sdk_core.address import Address
-from multiversx_sdk_core.token_payment import TokenPayment
+from multiversx_sdk_core.token_transfer import TokenTransfer
 from multiversx_sdk_core.transaction import Transaction
 from multiversx_sdk_core.transaction_payload import TransactionPayload
 
@@ -26,7 +26,7 @@ def test_serialize_for_signing():
         nonce=90,
         sender=sender,
         receiver=receiver,
-        value=TokenPayment.egld_from_amount("1.0"),
+        value=TokenTransfer.of_egld(1000000000000000000),
         data=TransactionPayload.from_str("hello"),
         gas_limit=70000,
         gas_price=1000000000,

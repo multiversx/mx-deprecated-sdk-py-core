@@ -1,7 +1,7 @@
 from typing import List, Optional, Protocol, Sequence
 
 from multiversx_sdk_core.interfaces import (IAddress, IGasLimit, IGasPrice,
-                                            INonce, ITokenPayment,
+                                            INonce, ITokenTransfer,
                                             ITransactionValue)
 from multiversx_sdk_core.serializer import arg_to_string
 from multiversx_sdk_core.transaction_builders.transaction_builder import (
@@ -23,14 +23,14 @@ class EGLDTransferBuilder(TransactionBuilder):
                  config: ITransactionBuilderConfiguration,
                  sender: IAddress,
                  receiver: IAddress,
-                 payment: ITokenPayment,
+                 transfer: ITokenTransfer,
                  nonce: Optional[INonce] = None,
                  data: Optional[str] = None,
                  gas_limit: Optional[IGasLimit] = None,
                  gas_price: Optional[IGasPrice] = None
                  ) -> None:
-        assert payment.is_egld()
-        super().__init__(config, nonce, payment.amount_as_integer, gas_limit, gas_price)
+        assert transfer.is_egld()
+        super().__init__(config, nonce, transfer.amount_in_atomic_unit, gas_limit, gas_price)
         self.sender = sender
         self.receiver = receiver
         self.data = data
@@ -47,7 +47,7 @@ class ESDTTransferBuilder(TransactionBuilder):
                  config: IESDTTransferConfiguration,
                  sender: IAddress,
                  receiver: IAddress,
-                 payment: ITokenPayment,
+                 transfer: ITokenTransfer,
                  nonce: Optional[INonce] = None,
                  value: Optional[ITransactionValue] = None,
                  gas_limit: Optional[IGasLimit] = None,
@@ -59,7 +59,7 @@ class ESDTTransferBuilder(TransactionBuilder):
 
         self.sender = sender
         self.receiver = receiver
-        self.payment = payment
+        self.transfer = transfer
 
     def _estimate_execution_gas(self) -> IGasLimit:
         return self.gas_limit_esdt_transfer + self.additional_gas_for_esdt_transfer
@@ -67,8 +67,8 @@ class ESDTTransferBuilder(TransactionBuilder):
     def _build_payload_parts(self) -> List[str]:
         return [
             "ESDTTransfer",
-            arg_to_string(self.payment.token_identifier),
-            arg_to_string(self.payment.amount_as_integer)
+            arg_to_string(self.transfer.token_identifier),
+            arg_to_string(self.transfer.amount_in_atomic_unit)
         ]
 
 
@@ -77,7 +77,7 @@ class ESDTNFTTransferBuilder(TransactionBuilder):
                  config: IESDTNFTTransferConfiguration,
                  sender: IAddress,
                  destination: IAddress,
-                 payment: ITokenPayment,
+                 transfer: ITokenTransfer,
                  nonce: Optional[INonce] = None,
                  value: Optional[ITransactionValue] = None,
                  gas_limit: Optional[IGasLimit] = None,
@@ -90,7 +90,7 @@ class ESDTNFTTransferBuilder(TransactionBuilder):
         self.sender = sender
         self.receiver = sender
         self.destination = destination
-        self.payment = payment
+        self.transfer = transfer
 
     def _estimate_execution_gas(self) -> IGasLimit:
         return self.gas_limit_esdt_nft_transfer + self.additional_gas_for_esdt_nft_transfer
@@ -98,9 +98,9 @@ class ESDTNFTTransferBuilder(TransactionBuilder):
     def _build_payload_parts(self) -> List[str]:
         return [
             "ESDTNFTTransfer",
-            arg_to_string(self.payment.token_identifier),
-            arg_to_string(self.payment.token_nonce),
-            arg_to_string(self.payment.amount_as_integer),
+            arg_to_string(self.transfer.token_identifier),
+            arg_to_string(self.transfer.token_nonce),
+            arg_to_string(self.transfer.amount_in_atomic_unit),
             arg_to_string(self.destination)
         ]
 
@@ -110,7 +110,7 @@ class MultiESDTNFTTransferBuilder(TransactionBuilder):
                  config: IESDTNFTTransferConfiguration,
                  sender: IAddress,
                  destination: IAddress,
-                 payments: Sequence[ITokenPayment],
+                 transfers: Sequence[ITokenTransfer],
                  nonce: Optional[INonce] = None,
                  value: Optional[ITransactionValue] = None,
                  gas_limit: Optional[IGasLimit] = None,
@@ -123,23 +123,23 @@ class MultiESDTNFTTransferBuilder(TransactionBuilder):
         self.sender = sender
         self.receiver = sender
         self.destination = destination
-        self.payments = payments
+        self.transfers = transfers
 
     def _estimate_execution_gas(self) -> IGasLimit:
-        return (self.gas_limit_esdt_nft_transfer + self.additional_gas_for_esdt_nft_transfer) * len(self.payments)
+        return (self.gas_limit_esdt_nft_transfer + self.additional_gas_for_esdt_nft_transfer) * len(self.transfers)
 
     def _build_payload_parts(self) -> List[str]:
         parts = [
             "MultiESDTNFTTransfer",
             arg_to_string(self.destination),
-            arg_to_string(len(self.payments))
+            arg_to_string(len(self.transfers))
         ]
 
-        for payment in self.payments:
+        for transfer in self.transfers:
             parts.extend([
-                arg_to_string(payment.token_identifier),
-                arg_to_string(payment.token_nonce),
-                arg_to_string(payment.amount_as_integer)
+                arg_to_string(transfer.token_identifier),
+                arg_to_string(transfer.token_nonce),
+                arg_to_string(transfer.amount_in_atomic_unit)
             ])
 
         return parts

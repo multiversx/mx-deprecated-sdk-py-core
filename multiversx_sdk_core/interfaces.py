@@ -13,6 +13,7 @@ ITransactionVersion = int
 ITransactionOptions = int
 ISignature = bytes
 ITokenIdentifier = str
+IGasPerDataByte = int
 
 
 class ITokenTransfer(Protocol):
@@ -36,3 +37,10 @@ class ITransactionPayload(Protocol):
 
 class ICodeMetadata(Protocol):
     def serialize(self) -> bytes: ...
+
+
+class INetworkConfig(Protocol):
+    min_gas_limit: IGasLimit
+    gas_per_data_byte: IGasPerDataByte
+    gas_price_modifier: float
+    chain_id: IChainID

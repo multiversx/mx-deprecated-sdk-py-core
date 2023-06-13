@@ -1,4 +1,8 @@
 
+from typing import Any
+
+import pytest
+
 from multiversx_sdk_core.token_transfer import TokenTransfer
 
 
@@ -35,3 +39,13 @@ def test_of_non_fungible():
     assert transfer.amount_in_atomic_unit == 1
     assert transfer.token_nonce == 7
     assert transfer.token_identifier == "TEST-38f249"
+
+
+def test_misuse_raises_error():
+    with pytest.raises(ValueError, match="amount_in_atomic_unit must be an integer"):
+        amount: Any = "1"
+        TokenTransfer.of_egld(amount)
+
+    with pytest.raises(ValueError, match="amount_in_atomic_unit must be an integer"):
+        amount: Any = "1"
+        TokenTransfer.of_fungible("USDC-c76f1f", amount)

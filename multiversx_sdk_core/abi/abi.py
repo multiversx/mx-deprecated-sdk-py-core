@@ -1,4 +1,6 @@
-from typing import Any, List
+import json
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 
 class TypeFormula:
@@ -127,6 +129,34 @@ class EndpointDefinition:
 
     def is_constructor(self) -> bool:
         return self.name == "constructor"
+
+
+class AbiRegistry:
+    def __init__(self,
+                 name: str = "",
+                 constructor: Optional[EndpointDefinition] = None,
+                 endpoints: List[EndpointDefinition] = [],
+                 types: List[TypeFormula] = []) -> None:
+        self.name: str = name
+        self.constructor: Optional[EndpointDefinition] = constructor
+        self.endpoints: List[EndpointDefinition] = endpoints
+        self.types: List[TypeFormula] = types
+
+    @classmethod
+    def from_file(cls, file_path: Path) -> 'AbiRegistry':
+        text = file_path.read_text()
+        data = json.loads(text)
+
+        return AbiRegistry.from_dict(data)
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'AbiRegistry':
+        name = data.get("name", "")
+        constructor = data.get("constructor", None)
+        endpoints = data.get("endpoints", [])
+        types = data.get("types", [])
+
+        return AbiRegistry(name, constructor, endpoints, types)
 
 
 if __name__ == "__main__":

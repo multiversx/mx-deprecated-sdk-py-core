@@ -64,8 +64,14 @@ class TypeFormulaParser:
                 stack.append(token)
 
         assert len(stack) == 1
-        assert isinstance(stack[0], TypeFormula)
-        return stack[0]
+
+        if isinstance(stack[0], str):
+            # Expression contained a simple, non-generic type
+            return TypeFormula(stack[0], [])
+        elif isinstance(stack[0], TypeFormula):
+            return stack[0]
+        else:
+            raise Exception(f"Unexpected item on stack: {stack[0]}")
 
     def _tokenize_expression(self, expression: str) -> List[str]:
         tokens: List[str] = []
@@ -92,16 +98,34 @@ class TypeFormulaParser:
 
 ENDPOINT_NAME_PLACEHOLDER = "?"
 ENDPOINT_DESCRIPTION_PLACEHOLDER = "N / A"
+ENDPOINT_PARAMETER_NAME_PLACEHOLDER = "?"
+ENDPOINT_PARAMETER_DESCRIPTION_PLACEHOLDER = "N / A"
 
 
 class EndpointParameterDefinition:
     def __init__(self,
-                 type_formula: 'TypeFormula',
-                 name: str = ENDPOINT_NAME_PLACEHOLDER,
-                 description: str = ENDPOINT_DESCRIPTION_PLACEHOLDER) -> None:
+                 name: str,
+                 description: str,
+                 type_formula: 'TypeFormula',) -> None:
         self.name: str = name
         self.description: str = description
         self.type_formula: TypeFormula = type_formula
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'EndpointParameterDefinition':
+        name = data.get("name", ENDPOINT_PARAMETER_NAME_PLACEHOLDER)
+        description = data.get("description", ENDPOINT_PARAMETER_DESCRIPTION_PLACEHOLDER)
+        type = data["type"]
+        type_formula = TypeFormula.from_expression(type)
+
+        return EndpointParameterDefinition(name, description, type_formula)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "name": self.name,
+            "description": self.description,
+            "type": str(self.type_formula)
+        }
 
 
 class EndpointModifiers:
@@ -115,20 +139,57 @@ class EndpointModifiers:
     def default(cls) -> 'EndpointModifiers':
         return EndpointModifiers("", [])
 
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'EndpointModifiers':
+        mutability: str = data.get("mutability", "")
+        payable_in_tokens: List[str] = data.get("payableInTokens", [])
+
+        return EndpointModifiers(mutability, payable_in_tokens)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "mutability": self.mutability,
+            "payableInTokens": self.payable_in_tokens
+        }
+
 
 class EndpointDefinition:
     def __init__(self,
                  name: str,
-                 input: List[EndpointParameterDefinition] = [],
-                 output: List[EndpointParameterDefinition] = [],
+                 description: str,
+                 inputs: List[EndpointParameterDefinition] = [],
+                 outputs: List[EndpointParameterDefinition] = [],
                  modifiers: EndpointModifiers = EndpointModifiers.default()) -> None:
         self.name: str = name
-        self.input: List[EndpointParameterDefinition] = input
-        self.output: List[EndpointParameterDefinition] = output
+        self.description: str = description
+        self.input: List[EndpointParameterDefinition] = inputs
+        self.output: List[EndpointParameterDefinition] = outputs
         self.modifiers: EndpointModifiers = modifiers
 
     def is_constructor(self) -> bool:
         return self.name == "constructor"
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'EndpointDefinition':
+        name = data.get("name", ENDPOINT_NAME_PLACEHOLDER)
+        description = data.get("description", ENDPOINT_DESCRIPTION_PLACEHOLDER)
+        inputs_data = data.get("inputs", [])
+        outputs_data = data.get("outputs", [])
+
+        inputs = [EndpointParameterDefinition.from_dict(input) for input in inputs_data]
+        outputs = [EndpointParameterDefinition.from_dict(output) for output in outputs_data]
+        modifiers = EndpointModifiers.from_dict(data)
+
+        return EndpointDefinition(name, description, inputs, outputs, modifiers)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "name": self.name,
+            "description": self.description,
+            "inputs": [input.to_dict() for input in self.input],
+            "outputs": [output.to_dict() for output in self.output],
+            **self.modifiers.to_dict()
+        }
 
 
 class AbiRegistry:
@@ -152,15 +213,28 @@ class AbiRegistry:
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'AbiRegistry':
         name = data.get("name", "")
-        constructor = data.get("constructor", None)
-        endpoints = data.get("endpoints", [])
-        types = data.get("types", [])
+        constructor_data = data.get("constructor", None)
+        endpoints_data = data.get("endpoints", [])
+        types_data = data.get("types", [])
+
+        constructor = EndpointDefinition.from_dict(constructor_data) if constructor_data else None
+        endpoints = [EndpointDefinition.from_dict(endpoint_data) for endpoint_data in endpoints_data]
+        types = [TypeFormula.from_expression(type_data) for type_data in types_data]
 
         return AbiRegistry(name, constructor, endpoints, types)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "name": self.name,
+            "constructor": self.constructor.to_dict() if self.constructor else None,
+            "endpoints": [endpoint.to_dict() for endpoint in self.endpoints],
+            "types": [str(type) for type in self.types]
+        }
 
 
 if __name__ == "__main__":
     test_vectors = [
+        "i64",
         "MultiResultVec<MultiResult2<Address, u64>>",
         "tuple3<i32, bytes, Option<i64>>",
         "tuple2<i32, i32>",
@@ -174,3 +248,6 @@ if __name__ == "__main__":
 
         if str(type_formula) != test_vector:
             raise Exception(f"Type formula [{type_formula}] != [{test_vector}]")
+
+    abi_registry = AbiRegistry.from_file(Path(__file__).parent / "testdata" / "counter.abi.json")
+    print(json.dumps(abi_registry.to_dict(), indent=2))

@@ -43,7 +43,7 @@ class TokenOperationsFactory:
 
     def create_issue_fungible_transaction(
         self,
-        issuer: IAddress,
+        sender: IAddress,
         token_name: str,
         token_ticker: str,
         initial_supply: int,
@@ -54,7 +54,7 @@ class TokenOperationsFactory:
         can_change_owner: bool,
         can_upgrade: bool,
         can_add_special_roles: bool,
-        transaction_nonce: Optional[INonce] = None,
+        nonce: Optional[INonce] = None,
         guardian: Optional[IAddress] = None,
         gas_price: Optional[IGasPrice] = None,
         gas_limit: Optional[IGasLimit] = None
@@ -76,9 +76,9 @@ class TokenOperationsFactory:
         ]
 
         return self._create_transaction(
-            sender=issuer,
+            sender=sender,
             receiver=self._config.esdt_contract_address,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=self._config.issue_cost,
             gas_price=gas_price,
             gas_limit_hint=gas_limit,
@@ -97,7 +97,7 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
 
     def create_issue_semi_fungible_transaction(
         self,
-        issuer: IAddress,
+        sender: IAddress,
         token_name: str,
         token_ticker: str,
         can_freeze: bool,
@@ -107,7 +107,7 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
         can_change_owner: bool,
         can_upgrade: bool,
         can_add_special_roles: bool,
-        transaction_nonce: Optional[INonce] = None,
+        nonce: Optional[INonce] = None,
         guardian: Optional[IAddress] = None,
         gas_price: Optional[IGasPrice] = None,
         gas_limit: Optional[IGasLimit] = None
@@ -128,9 +128,9 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
         ]
 
         return self._create_transaction(
-            sender=issuer,
+            sender=sender,
             receiver=self._config.esdt_contract_address,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=self._config.issue_cost,
             gas_price=gas_price,
             gas_limit_hint=gas_limit,
@@ -141,7 +141,7 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
 
     def create_issue_non_fungible_transaction(
         self,
-        issuer: IAddress,
+        sender: IAddress,
         token_name: str,
         token_ticker: str,
         can_freeze: bool,
@@ -151,7 +151,7 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
         can_change_owner: bool,
         can_upgrade: bool,
         can_add_special_roles: bool,
-        transaction_nonce: Optional[INonce] = None,
+        nonce: Optional[INonce] = None,
         guardian: Optional[IAddress] = None,
         gas_price: Optional[IGasPrice] = None,
         gas_limit: Optional[IGasLimit] = None
@@ -172,9 +172,9 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
         ]
 
         return self._create_transaction(
-            sender=issuer,
+            sender=sender,
             receiver=self._config.esdt_contract_address,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=self._config.issue_cost,
             gas_price=gas_price,
             gas_limit_hint=gas_limit,
@@ -185,7 +185,7 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
 
     def create_register_meta_esdt_transaction(
         self,
-        issuer: IAddress,
+        sender: IAddress,
         token_name: str,
         token_ticker: str,
         num_decimals: int,
@@ -196,7 +196,7 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
         can_change_owner: bool,
         can_upgrade: bool,
         can_add_special_roles: bool,
-        transaction_nonce: Optional[INonce] = None,
+        nonce: Optional[INonce] = None,
         guardian: Optional[IAddress] = None,
         gas_price: Optional[IGasPrice] = None,
         gas_limit: Optional[IGasLimit] = None
@@ -218,9 +218,9 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
         ]
 
         return self._create_transaction(
-            sender=issuer,
+            sender=sender,
             receiver=self._config.esdt_contract_address,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=self._config.issue_cost,
             gas_price=gas_price,
             gas_limit_hint=gas_limit,
@@ -231,12 +231,12 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
 
     def create_register_and_set_all_roles_transaction(
         self,
-        issuer: IAddress,
+        sender: IAddress,
         token_name: str,
         token_ticker: str,
         token_type: str,
         num_decimals: int,
-        transaction_nonce: Optional[INonce] = None,
+        nonce: Optional[INonce] = None,
         guardian: Optional[IAddress] = None,
         gas_price: Optional[IGasPrice] = None,
         gas_limit: Optional[IGasLimit] = None
@@ -252,9 +252,9 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
         ]
 
         return self._create_transaction(
-            sender=issuer,
+            sender=sender,
             receiver=self._config.esdt_contract_address,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=self._config.issue_cost,
             gas_price=gas_price,
             gas_limit_hint=gas_limit,
@@ -265,9 +265,9 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
 
     def create_set_burn_role_globally_transaction(
         self,
-        manager: IAddress,
+        sender: IAddress,
         token_identifier: str,
-        transaction_nonce: Optional[INonce] = None,
+        nonce: Optional[INonce] = None,
         guardian: Optional[IAddress] = None,
         gas_price: Optional[IGasPrice] = None,
         gas_limit: Optional[IGasLimit] = None
@@ -278,9 +278,9 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
         ]
 
         return self._create_transaction(
-            sender=manager,
+            sender=sender,
             receiver=self._config.esdt_contract_address,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=None,
             gas_price=gas_price,
             gas_limit_hint=gas_limit,
@@ -291,9 +291,9 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
 
     def create_unset_burn_role_globally_transaction(
         self,
-        manager: IAddress,
+        sender: IAddress,
         token_identifier: str,
-        transaction_nonce: Optional[INonce] = None,
+        nonce: Optional[INonce] = None,
         guardian: Optional[IAddress] = None,
         gas_price: Optional[IGasPrice] = None,
         gas_limit: Optional[IGasLimit] = None
@@ -304,9 +304,9 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
         ]
 
         return self._create_transaction(
-            sender=manager,
+            sender=sender,
             receiver=self._config.esdt_contract_address,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=None,
             gas_price=gas_price,
             gas_limit_hint=gas_limit,
@@ -317,12 +317,12 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
 
     def create_set_special_role_on_fungible_transaction(
         self,
-        manager: IAddress,
+        sender: IAddress,
         user: IAddress,
         token_identifier: str,
         add_role_local_mint: bool,
         add_role_local_burn: bool,
-        transaction_nonce: Optional[INonce] = None,
+        nonce: Optional[INonce] = None,
         guardian: Optional[IAddress] = None,
         gas_price: Optional[IGasPrice] = None,
         gas_limit: Optional[IGasLimit] = None
@@ -336,9 +336,9 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
         ]
 
         return self._create_transaction(
-            sender=manager,
+            sender=sender,
             receiver=self._config.esdt_contract_address,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=None,
             gas_price=gas_price,
             gas_limit_hint=gas_limit,
@@ -349,14 +349,14 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
 
     def create_set_special_role_on_semi_fungible_transaction(
         self,
-        manager: IAddress,
+        sender: IAddress,
         user: IAddress,
         token_identifier: str,
         add_role_nft_create: bool,
         add_role_nft_burn: bool,
         add_role_nft_add_quantity: bool,
         add_role_esdt_transfer_role: bool,
-        transaction_nonce: Optional[INonce] = None,
+        nonce: Optional[INonce] = None,
         guardian: Optional[IAddress] = None,
         gas_price: Optional[IGasPrice] = None,
         gas_limit: Optional[IGasLimit] = None
@@ -372,9 +372,9 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
         ]
 
         return self._create_transaction(
-            sender=manager,
+            sender=sender,
             receiver=self._config.esdt_contract_address,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=None,
             gas_price=gas_price,
             gas_limit_hint=gas_limit,
@@ -385,7 +385,7 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
 
     def create_set_special_role_on_non_fungible_transaction(
         self,
-        manager: IAddress,
+        sender: IAddress,
         user: IAddress,
         token_identifier: str,
         add_role_nft_create: bool,
@@ -393,7 +393,7 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
         add_role_nft_update_attributes: bool,
         add_role_nft_add_uri: bool,
         add_role_esdt_transfer_role: bool,
-        transaction_nonce: Optional[INonce] = None,
+        nonce: Optional[INonce] = None,
         guardian: Optional[IAddress] = None,
         gas_price: Optional[IGasPrice] = None,
         gas_limit: Optional[IGasLimit] = None
@@ -410,9 +410,9 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
         ]
 
         return self._create_transaction(
-            sender=manager,
+            sender=sender,
             receiver=self._config.esdt_contract_address,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=None,
             gas_price=gas_price,
             gas_limit_hint=gas_limit,
@@ -423,7 +423,7 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
 
     def create_nft_create_transaction(
         self,
-        creator: IAddress,
+        sender: IAddress,
         token_identifier: str,
         initial_quantity: int,
         name: str,
@@ -431,7 +431,7 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
         hash: str,
         attributes: bytes,
         uris: List[str],
-        transaction_nonce: Optional[INonce] = None,
+        nonce: Optional[INonce] = None,
         guardian: Optional[IAddress] = None,
         gas_price: Optional[IGasPrice] = None,
         gas_limit: Optional[IGasLimit] = None
@@ -452,9 +452,9 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
         storage_gas_limit = len(nft_data) * self._config.gas_limit_store_per_byte
 
         return self._create_transaction(
-            sender=creator,
-            receiver=creator,
-            nonce=transaction_nonce,
+            sender=sender,
+            receiver=sender,
+            nonce=nonce,
             value=None,
             gas_price=gas_price,
             gas_limit_hint=gas_limit,
@@ -465,9 +465,9 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
 
     def create_pause_transaction(
         self,
-        manager: IAddress,
+        sender: IAddress,
         token_identifier: str,
-        transaction_nonce: Optional[INonce] = None,
+        nonce: Optional[INonce] = None,
         guardian: Optional[IAddress] = None,
         gas_price: Optional[IGasPrice] = None,
         gas_limit: Optional[IGasLimit] = None,
@@ -478,9 +478,9 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
         ]
 
         return self._create_transaction(
-            sender=manager,
+            sender=sender,
             receiver=self._config.esdt_contract_address,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=None,
             gas_price=gas_price,
             gas_limit_hint=gas_limit,
@@ -491,9 +491,9 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
 
     def create_unpause_transaction(
         self,
-        manager: IAddress,
+        sender: IAddress,
         token_identifier: str,
-        transaction_nonce: Optional[INonce] = None,
+        nonce: Optional[INonce] = None,
         guardian: Optional[IAddress] = None,
         gas_price: Optional[IGasPrice] = None,
         gas_limit: Optional[IGasLimit] = None,
@@ -504,9 +504,9 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
         ]
 
         return self._create_transaction(
-            sender=manager,
+            sender=sender,
             receiver=self._config.esdt_contract_address,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=None,
             gas_price=gas_price,
             gas_limit_hint=gas_limit,
@@ -517,10 +517,10 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
 
     def create_freeze_transaction(
         self,
-        manager: IAddress,
+        sender: IAddress,
         user: IAddress,
         token_identifier: str,
-        transaction_nonce: Optional[INonce] = None,
+        nonce: Optional[INonce] = None,
         guardian: Optional[IAddress] = None,
         gas_price: Optional[IGasPrice] = None,
         gas_limit: Optional[IGasLimit] = None,
@@ -532,9 +532,9 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
         ]
 
         return self._create_transaction(
-            sender=manager,
+            sender=sender,
             receiver=self._config.esdt_contract_address,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=None,
             gas_price=gas_price,
             gas_limit_hint=gas_limit,
@@ -545,10 +545,10 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
 
     def create_unfreeze_transaction(
         self,
-        manager: IAddress,
+        sender: IAddress,
         user: IAddress,
         token_identifier: str,
-        transaction_nonce: Optional[INonce] = None,
+        nonce: Optional[INonce] = None,
         guardian: Optional[IAddress] = None,
         gas_price: Optional[IGasPrice] = None,
         gas_limit: Optional[IGasLimit] = None,
@@ -560,9 +560,9 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
         ]
 
         return self._create_transaction(
-            sender=manager,
+            sender=sender,
             receiver=self._config.esdt_contract_address,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=None,
             gas_price=gas_price,
             gas_limit_hint=gas_limit,
@@ -573,10 +573,10 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
 
     def create_wipe_transaction(
         self,
-        manager: IAddress,
+        sender: IAddress,
         user: IAddress,
         token_identifier: str,
-        transaction_nonce: Optional[INonce] = None,
+        nonce: Optional[INonce] = None,
         guardian: Optional[IAddress] = None,
         gas_price: Optional[IGasPrice] = None,
         gas_limit: Optional[IGasLimit] = None,
@@ -588,9 +588,9 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
         ]
 
         return self._create_transaction(
-            sender=manager,
+            sender=sender,
             receiver=self._config.esdt_contract_address,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=None,
             gas_price=gas_price,
             gas_limit_hint=gas_limit,
@@ -601,10 +601,10 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
 
     def create_local_mint_transaction(
         self,
-        manager: IAddress,
+        sender: IAddress,
         token_identifier: str,
         supply_to_mint: int,
-        transaction_nonce: Optional[INonce] = None,
+        nonce: Optional[INonce] = None,
         guardian: Optional[IAddress] = None,
         gas_price: Optional[IGasPrice] = None,
         gas_limit: Optional[IGasLimit] = None,
@@ -616,9 +616,9 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
         ]
 
         return self._create_transaction(
-            sender=manager,
-            receiver=manager,
-            nonce=transaction_nonce,
+            sender=sender,
+            receiver=sender,
+            nonce=nonce,
             value=None,
             gas_price=gas_price,
             gas_limit_hint=gas_limit,
@@ -629,10 +629,10 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
 
     def create_local_burn_transaction(
         self,
-        manager: IAddress,
+        sender: IAddress,
         token_identifier: str,
         supply_to_burn: int,
-        transaction_nonce: Optional[INonce] = None,
+        nonce: Optional[INonce] = None,
         guardian: Optional[IAddress] = None,
         gas_price: Optional[IGasPrice] = None,
         gas_limit: Optional[IGasLimit] = None,
@@ -644,9 +644,9 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
         ]
 
         return self._create_transaction(
-            sender=manager,
-            receiver=manager,
-            nonce=transaction_nonce,
+            sender=sender,
+            receiver=sender,
+            nonce=nonce,
             value=None,
             gas_price=gas_price,
             gas_limit_hint=gas_limit,
@@ -657,11 +657,11 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
 
     def create_update_attributes_transaction(
         self,
-        manager: IAddress,
+        sender: IAddress,
         token_identifier: str,
         token_nonce: int,
         attributes: bytes,
-        transaction_nonce: Optional[INonce] = None,
+        nonce: Optional[INonce] = None,
         guardian: Optional[IAddress] = None,
         gas_price: Optional[IGasPrice] = None,
         gas_limit: Optional[IGasLimit] = None,
@@ -674,9 +674,9 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
         ]
 
         return self._create_transaction(
-            sender=manager,
-            receiver=manager,
-            nonce=transaction_nonce,
+            sender=sender,
+            receiver=sender,
+            nonce=nonce,
             value=None,
             gas_price=gas_price,
             gas_limit_hint=gas_limit,
@@ -687,11 +687,11 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
 
     def create_add_quantity_transaction(
         self,
-        manager: IAddress,
+        sender: IAddress,
         token_identifier: str,
         token_nonce: int,
         quantity_to_add: int,
-        transaction_nonce: Optional[INonce] = None,
+        nonce: Optional[INonce] = None,
         guardian: Optional[IAddress] = None,
         gas_price: Optional[IGasPrice] = None,
         gas_limit: Optional[IGasLimit] = None,
@@ -704,9 +704,9 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
         ]
 
         return self._create_transaction(
-            sender=manager,
-            receiver=manager,
-            nonce=transaction_nonce,
+            sender=sender,
+            receiver=sender,
+            nonce=nonce,
             value=None,
             gas_price=gas_price,
             gas_limit_hint=gas_limit,
@@ -717,11 +717,11 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
 
     def create_burn_quantity_transaction(
         self,
-        manager: IAddress,
+        sender: IAddress,
         token_identifier: str,
         token_nonce: int,
         quantity_to_burn: int,
-        transaction_nonce: Optional[INonce] = None,
+        nonce: Optional[INonce] = None,
         guardian: Optional[IAddress] = None,
         gas_price: Optional[IGasPrice] = None,
         gas_limit: Optional[IGasLimit] = None,
@@ -734,9 +734,9 @@ Once the token is registered, you can unset this role by calling "unsetBurnRoleG
         ]
 
         return self._create_transaction(
-            sender=manager,
-            receiver=manager,
-            nonce=transaction_nonce,
+            sender=sender,
+            receiver=sender,
+            nonce=nonce,
             value=None,
             gas_price=gas_price,
             gas_limit_hint=gas_limit,

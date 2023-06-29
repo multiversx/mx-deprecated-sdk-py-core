@@ -38,7 +38,7 @@ class DelegationFactory:
                                                    total_delegation_cap: int,
                                                    service_fee: int,
                                                    value: ITransactionValue,
-                                                   transaction_nonce: Optional[INonce] = None,
+                                                   nonce: Optional[INonce] = None,
                                                    guardian: Optional[IAddress] = None,
                                                    gas_price: Optional[IGasPrice] = None,
                                                    gas_limit: Optional[IGasLimit] = None) -> Transaction:
@@ -55,7 +55,7 @@ class DelegationFactory:
             execution_gas_limit=self.config.gas_limit_create_delegation_contract + self.config.additional_gas_for_delegation_operations,
             gas_limit_hint=gas_limit,
             gas_price=gas_price,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=value,
             guardian=guardian
         )
@@ -64,12 +64,12 @@ class DelegationFactory:
 
     def create_add_nodes_transaction(self,
                                      sender: IAddress,
-                                     delegation_contract: IAddress,
+                                     receiver: IAddress,
                                      public_keys: Sequence[IValidatorPublicKey],
                                      signed_messages: Sequence[ISignature],
                                      value: Optional[ITransactionValue] = None,
                                      guardian: Optional[IAddress] = None,
-                                     transaction_nonce: Optional[INonce] = None,
+                                     nonce: Optional[INonce] = None,
                                      gas_price: Optional[IGasPrice] = None,
                                      gas_limit: Optional[IGasLimit] = None) -> Transaction:
         if len(public_keys) != len(signed_messages):
@@ -84,12 +84,12 @@ class DelegationFactory:
 
         transaction = self.create_transaction(
             sender=sender,
-            receiver=delegation_contract,
+            receiver=receiver,
             data_parts=parts,
             execution_gas_limit=self._compute_execution_gas_limit_for_nodes_management(num_nodes),
             gas_limit_hint=gas_limit,
             gas_price=gas_price,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=value,
             guardian=guardian
         )
@@ -100,11 +100,11 @@ class DelegationFactory:
 
     def create_remove_nodes_transaction(self,
                                         sender: IAddress,
-                                        delegation_contract: IAddress,
+                                        receiver: IAddress,
                                         bls_keys: List[str],
                                         value: Optional[ITransactionValue] = None,
                                         guardian: Optional[IAddress] = None,
-                                        transaction_nonce: Optional[INonce] = None,
+                                        nonce: Optional[INonce] = None,
                                         gas_price: Optional[IGasPrice] = None,
                                         gas_limit: Optional[IGasLimit] = None) -> Transaction:
         num_nodes = len(bls_keys)
@@ -114,12 +114,12 @@ class DelegationFactory:
 
         transaction = self.create_transaction(
             sender=sender,
-            receiver=delegation_contract,
+            receiver=receiver,
             data_parts=parts,
             execution_gas_limit=self._compute_execution_gas_limit_for_nodes_management(num_nodes),
             gas_limit_hint=gas_limit,
             gas_price=gas_price,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=value,
             guardian=guardian
         )
@@ -128,11 +128,11 @@ class DelegationFactory:
 
     def create_stake_nodes_transaction(self,
                                        sender: IAddress,
-                                       delegation_contract: IAddress,
+                                       receiver: IAddress,
                                        bls_keys: List[str],
                                        value: Optional[ITransactionValue] = None,
                                        guardian: Optional[IAddress] = None,
-                                       transaction_nonce: Optional[INonce] = None,
+                                       nonce: Optional[INonce] = None,
                                        gas_price: Optional[IGasPrice] = None,
                                        gas_limit: Optional[IGasLimit] = None) -> Transaction:
         num_nodes = len(bls_keys)
@@ -142,12 +142,12 @@ class DelegationFactory:
 
         transaction = self.create_transaction(
             sender=sender,
-            receiver=delegation_contract,
+            receiver=receiver,
             data_parts=parts,
             execution_gas_limit=self.config.gas_limit_delegation_operations + self.config.gas_limit_stake + num_nodes * self.config.additional_gas_limit_per_validator_node,
             gas_limit_hint=gas_limit,
             gas_price=gas_price,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=value,
             guardian=guardian
         )
@@ -156,11 +156,11 @@ class DelegationFactory:
 
     def create_unbond_nodes_transaction(self,
                                         sender: IAddress,
-                                        delegation_contract: IAddress,
+                                        receiver: IAddress,
                                         bls_keys: List[str],
                                         value: Optional[ITransactionValue] = None,
                                         guardian: Optional[IAddress] = None,
-                                        transaction_nonce: Optional[INonce] = None,
+                                        nonce: Optional[INonce] = None,
                                         gas_price: Optional[IGasPrice] = None,
                                         gas_limit: Optional[IGasLimit] = None) -> Transaction:
         num_nodes = len(bls_keys)
@@ -170,12 +170,12 @@ class DelegationFactory:
 
         transaction = self.create_transaction(
             sender=sender,
-            receiver=delegation_contract,
+            receiver=receiver,
             data_parts=parts,
             execution_gas_limit=self.config.gas_limit_delegation_operations + self.config.gas_limit_unbond + num_nodes * self.config.additional_gas_limit_per_validator_node,
             gas_limit_hint=gas_limit,
             gas_price=gas_price,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=value,
             guardian=guardian
         )
@@ -184,11 +184,11 @@ class DelegationFactory:
 
     def create_unstake_nodes_transaction(self,
                                          sender: IAddress,
-                                         delegation_contract: IAddress,
+                                         receiver: IAddress,
                                          bls_keys: List[str],
                                          value: Optional[ITransactionValue] = None,
                                          guardian: Optional[IAddress] = None,
-                                         transaction_nonce: Optional[INonce] = None,
+                                         nonce: Optional[INonce] = None,
                                          gas_price: Optional[IGasPrice] = None,
                                          gas_limit: Optional[IGasLimit] = None) -> Transaction:
         num_nodes = len(bls_keys)
@@ -198,12 +198,12 @@ class DelegationFactory:
 
         transaction = self.create_transaction(
             sender=sender,
-            receiver=delegation_contract,
+            receiver=receiver,
             data_parts=parts,
             execution_gas_limit=self.config.gas_limit_delegation_operations + self.config.gas_limit_unstake + num_nodes * self.config.additional_gas_limit_per_validator_node,
             gas_limit_hint=gas_limit,
             gas_price=gas_price,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=value,
             guardian=guardian
         )
@@ -212,11 +212,11 @@ class DelegationFactory:
 
     def create_unjail_nodes_transaction(self,
                                         sender: IAddress,
-                                        delegation_contract: IAddress,
+                                        receiver: IAddress,
                                         bls_keys: List[str],
-                                        value: Optional[ITransactionValue] = None,
+                                        value: ITransactionValue,
                                         guardian: Optional[IAddress] = None,
-                                        transaction_nonce: Optional[INonce] = None,
+                                        nonce: Optional[INonce] = None,
                                         gas_price: Optional[IGasPrice] = None,
                                         gas_limit: Optional[IGasLimit] = None) -> Transaction:
         num_nodes = len(bls_keys)
@@ -226,12 +226,12 @@ class DelegationFactory:
 
         transaction = self.create_transaction(
             sender=sender,
-            receiver=delegation_contract,
+            receiver=receiver,
             data_parts=parts,
             execution_gas_limit=self._compute_execution_gas_limit_for_nodes_management(num_nodes),
             gas_limit_hint=gas_limit,
             gas_price=gas_price,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=value,
             guardian=guardian
         )
@@ -240,11 +240,11 @@ class DelegationFactory:
 
     def create_change_service_fee_transaction(self,
                                               sender: IAddress,
-                                              delegation_contract: IAddress,
+                                              receiver: IAddress,
                                               service_fee: int,
                                               value: Optional[ITransactionValue] = None,
                                               guardian: Optional[IAddress] = None,
-                                              transaction_nonce: Optional[INonce] = None,
+                                              nonce: Optional[INonce] = None,
                                               gas_price: Optional[IGasPrice] = None,
                                               gas_limit: Optional[IGasLimit] = None) -> Transaction:
         parts = [
@@ -254,12 +254,12 @@ class DelegationFactory:
 
         transaction = self.create_transaction(
             sender=sender,
-            receiver=delegation_contract,
+            receiver=receiver,
             data_parts=parts,
             execution_gas_limit=self.config.gas_limit_delegation_operations + self.config.additional_gas_for_delegation_operations,
             gas_limit_hint=gas_limit,
             gas_price=gas_price,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=value,
             guardian=guardian
         )
@@ -268,11 +268,11 @@ class DelegationFactory:
 
     def create_modify_delegation_cap_transaction(self,
                                                  sender: IAddress,
-                                                 delegation_contract: IAddress,
+                                                 receiver: IAddress,
                                                  delegation_cap: int,
                                                  value: Optional[ITransactionValue] = None,
                                                  guardian: Optional[IAddress] = None,
-                                                 transaction_nonce: Optional[INonce] = None,
+                                                 nonce: Optional[INonce] = None,
                                                  gas_price: Optional[IGasPrice] = None,
                                                  gas_limit: Optional[IGasLimit] = None) -> Transaction:
         parts = [
@@ -282,12 +282,12 @@ class DelegationFactory:
 
         transaction = self.create_transaction(
             sender=sender,
-            receiver=delegation_contract,
+            receiver=receiver,
             data_parts=parts,
             execution_gas_limit=self.config.gas_limit_delegation_operations + self.config.additional_gas_for_delegation_operations,
             gas_limit_hint=gas_limit,
             gas_price=gas_price,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=value,
             guardian=guardian
         )
@@ -296,10 +296,10 @@ class DelegationFactory:
 
     def create_set_automatic_activation_transaction(self,
                                                     sender: IAddress,
-                                                    delegation_contract: IAddress,
+                                                    receiver: IAddress,
                                                     value: Optional[ITransactionValue] = None,
                                                     guardian: Optional[IAddress] = None,
-                                                    transaction_nonce: Optional[INonce] = None,
+                                                    nonce: Optional[INonce] = None,
                                                     gas_price: Optional[IGasPrice] = None,
                                                     gas_limit: Optional[IGasLimit] = None) -> Transaction:
         parts = [
@@ -309,12 +309,12 @@ class DelegationFactory:
 
         transaction = self.create_transaction(
             sender=sender,
-            receiver=delegation_contract,
+            receiver=receiver,
             data_parts=parts,
             execution_gas_limit=self.config.gas_limit_delegation_operations + self.config.additional_gas_for_delegation_operations,
             gas_limit_hint=gas_limit,
             gas_price=gas_price,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=value,
             guardian=guardian
         )
@@ -323,10 +323,10 @@ class DelegationFactory:
 
     def create_unset_automatic_activation_transaction(self,
                                                       sender: IAddress,
-                                                      delegation_contract: IAddress,
+                                                      receiver: IAddress,
                                                       value: Optional[ITransactionValue] = None,
                                                       guardian: Optional[IAddress] = None,
-                                                      transaction_nonce: Optional[INonce] = None,
+                                                      nonce: Optional[INonce] = None,
                                                       gas_price: Optional[IGasPrice] = None,
                                                       gas_limit: Optional[IGasLimit] = None) -> Transaction:
         parts = [
@@ -336,12 +336,12 @@ class DelegationFactory:
 
         transaction = self.create_transaction(
             sender=sender,
-            receiver=delegation_contract,
+            receiver=receiver,
             data_parts=parts,
             execution_gas_limit=self.config.gas_limit_delegation_operations + self.config.additional_gas_for_delegation_operations,
             gas_limit_hint=gas_limit,
             gas_price=gas_price,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=value,
             guardian=guardian
         )
@@ -350,10 +350,10 @@ class DelegationFactory:
 
     def create_set_redelegate_cap_transaction(self,
                                               sender: IAddress,
-                                              delegation_contract: IAddress,
+                                              receiver: IAddress,
                                               value: Optional[ITransactionValue] = None,
                                               guardian: Optional[IAddress] = None,
-                                              transaction_nonce: Optional[INonce] = None,
+                                              nonce: Optional[INonce] = None,
                                               gas_price: Optional[IGasPrice] = None,
                                               gas_limit: Optional[IGasLimit] = None) -> Transaction:
         parts = [
@@ -363,12 +363,12 @@ class DelegationFactory:
 
         transaction = self.create_transaction(
             sender=sender,
-            receiver=delegation_contract,
+            receiver=receiver,
             data_parts=parts,
             execution_gas_limit=self.config.gas_limit_delegation_operations + self.config.additional_gas_for_delegation_operations,
             gas_limit_hint=gas_limit,
             gas_price=gas_price,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=value,
             guardian=guardian
         )
@@ -377,10 +377,10 @@ class DelegationFactory:
 
     def create_unset_redelegate_cap_transaction(self,
                                                 sender: IAddress,
-                                                delegation_contract: IAddress,
+                                                receiver: IAddress,
                                                 value: Optional[ITransactionValue] = None,
                                                 guardian: Optional[IAddress] = None,
-                                                transaction_nonce: Optional[INonce] = None,
+                                                nonce: Optional[INonce] = None,
                                                 gas_price: Optional[IGasPrice] = None,
                                                 gas_limit: Optional[IGasLimit] = None) -> Transaction:
         parts = [
@@ -390,12 +390,12 @@ class DelegationFactory:
 
         transaction = self.create_transaction(
             sender=sender,
-            receiver=delegation_contract,
+            receiver=receiver,
             data_parts=parts,
             execution_gas_limit=self.config.gas_limit_delegation_operations + self.config.additional_gas_for_delegation_operations,
             gas_limit_hint=gas_limit,
             gas_price=gas_price,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=value,
             guardian=guardian
         )
@@ -404,13 +404,13 @@ class DelegationFactory:
 
     def create_set_metadata_transaction(self,
                                         sender: IAddress,
-                                        delegation_contract: IAddress,
+                                        receiver: IAddress,
                                         name: str,
                                         website: str,
                                         identifier: str,
                                         value: Optional[ITransactionValue] = None,
                                         guardian: Optional[IAddress] = None,
-                                        transaction_nonce: Optional[INonce] = None,
+                                        nonce: Optional[INonce] = None,
                                         gas_price: Optional[IGasPrice] = None,
                                         gas_limit: Optional[IGasLimit] = None) -> Transaction:
         parts = [
@@ -422,12 +422,12 @@ class DelegationFactory:
 
         transaction = self.create_transaction(
             sender=sender,
-            receiver=delegation_contract,
+            receiver=receiver,
             data_parts=parts,
             execution_gas_limit=self.config.gas_limit_delegation_operations + self.config.additional_gas_for_delegation_operations,
             gas_limit_hint=gas_limit,
             gas_price=gas_price,
-            nonce=transaction_nonce,
+            nonce=nonce,
             value=value,
             guardian=guardian
         )

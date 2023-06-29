@@ -25,7 +25,7 @@ class SmartContractFactory:
         self.config = config
 
     def create_deploy_transaction(self,
-                                  deployer: IAddress,
+                                  sender: IAddress,
                                   bytecode_path: Path,
                                   gas_limit: IGasLimit,
                                   arguments: List[Any] = [],
@@ -49,7 +49,7 @@ class SmartContractFactory:
         parts += args_to_strings(arguments)
 
         transaction = self.create_transaction(
-            sender=deployer,
+            sender=sender,
             receiver=Address.from_bech32(CONTRACT_DEPLOY_ADDRESS),
             data_parts=parts,
             gas_limit=gas_limit,
@@ -63,7 +63,7 @@ class SmartContractFactory:
 
     def create_execute_transaction(self,
                                    sender: IAddress,
-                                   contract_address: IAddress,
+                                   receiver: IAddress,
                                    function: str,
                                    gas_limit: IGasLimit,
                                    arguments: List[Any] = [],
@@ -74,7 +74,7 @@ class SmartContractFactory:
 
         transaction = self.create_transaction(
             sender=sender,
-            receiver=contract_address,
+            receiver=receiver,
             data_parts=parts,
             gas_limit=gas_limit,
             nonce=nonce,
@@ -86,7 +86,7 @@ class SmartContractFactory:
 
     def create_upgrade_transaction(self,
                                    sender: IAddress,
-                                   contract: IAddress,
+                                   receiver: IAddress,
                                    bytecode_path: Path,
                                    gas_limit: IGasLimit,
                                    arguments: List[Any] = [],
@@ -95,8 +95,7 @@ class SmartContractFactory:
                                    is_upgradeable: bool = True,
                                    is_readable: bool = True,
                                    is_payable: bool = True,
-                                   is_payable_by_sc: bool = True
-                                   ) -> Transaction:
+                                   is_payable_by_sc: bool = True) -> Transaction:
         bytecode = bytecode_path.read_bytes()
         metadata = CodeMetadata(is_upgradeable, is_readable, is_payable, is_payable_by_sc)
 
@@ -110,7 +109,7 @@ class SmartContractFactory:
 
         transaction = self.create_transaction(
             sender=sender,
-            receiver=contract,
+            receiver=receiver,
             data_parts=parts,
             gas_limit=gas_limit,
             nonce=nonce,

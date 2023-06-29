@@ -14,12 +14,12 @@ factory = TokenOperationsFactory(TransactionFactoryConfig("T"))
 
 def test_register_and_set_all_roles():
     transaction = factory.create_register_and_set_all_roles_transaction(
-        issuer=frank,
+        sender=frank,
         token_name="TEST",
         token_ticker="TEST",
         token_type="FNG",
         num_decimals=2,
-        transaction_nonce=42,
+        nonce=42,
         guardian=alice
     )
 
@@ -33,7 +33,7 @@ def test_register_and_set_all_roles():
 
 def test_issue_fungible():
     transaction = factory.create_issue_fungible_transaction(
-        issuer=frank,
+        sender=frank,
         token_name="FRANK",
         token_ticker="FRANK",
         initial_supply=100,
@@ -44,7 +44,7 @@ def test_issue_fungible():
         can_change_owner=True,
         can_upgrade=True,
         can_add_special_roles=True,
-        transaction_nonce=42,
+        nonce=42,
         guardian=alice
     )
 
@@ -58,7 +58,7 @@ def test_issue_fungible():
 
 def test_issue_semi_fungible():
     transaction = factory.create_issue_semi_fungible_transaction(
-        issuer=frank,
+        sender=frank,
         token_name="FRANK",
         token_ticker="FRANK",
         can_freeze=True,
@@ -68,7 +68,7 @@ def test_issue_semi_fungible():
         can_change_owner=True,
         can_upgrade=True,
         can_add_special_roles=True,
-        transaction_nonce=42,
+        nonce=42,
         guardian=alice
     )
 
@@ -82,7 +82,7 @@ def test_issue_semi_fungible():
 
 def test_issue_non_fungible():
     transaction = factory.create_issue_non_fungible_transaction(
-        issuer=frank,
+        sender=frank,
         token_name="FRANK",
         token_ticker="FRANK",
         can_freeze=True,
@@ -92,7 +92,7 @@ def test_issue_non_fungible():
         can_change_owner=True,
         can_upgrade=True,
         can_add_special_roles=True,
-        transaction_nonce=42,
+        nonce=42,
         guardian=alice
     )
 
@@ -106,7 +106,7 @@ def test_issue_non_fungible():
 
 def test_register_meta_esdt():
     transaction = factory.create_register_meta_esdt_transaction(
-        issuer=frank,
+        sender=frank,
         token_name="FRANK",
         token_ticker="FRANK",
         num_decimals=10,
@@ -117,7 +117,7 @@ def test_register_meta_esdt():
         can_change_owner=True,
         can_upgrade=True,
         can_add_special_roles=True,
-        transaction_nonce=42,
+        nonce=42,
         guardian=alice
     )
 
@@ -131,7 +131,7 @@ def test_register_meta_esdt():
 
 def test_set_special_role():
     transaction = factory.create_set_special_role_on_non_fungible_transaction(
-        manager=frank,
+        sender=frank,
         user=grace,
         token_identifier="FRANK-11ce3e",
         add_role_nft_create=True,
@@ -139,7 +139,7 @@ def test_set_special_role():
         add_role_nft_update_attributes=True,
         add_role_nft_add_uri=True,
         add_role_esdt_transfer_role=False,
-        transaction_nonce=42,
+        nonce=42,
         guardian=alice
     )
 
@@ -153,7 +153,7 @@ def test_set_special_role():
 
 def test_nft_create():
     transaction = factory.create_nft_create_transaction(
-        creator=grace,
+        sender=grace,
         token_identifier="FRANK-aa9e8d",
         initial_quantity=1,
         name="test",
@@ -161,7 +161,7 @@ def test_nft_create():
         hash="abba",
         attributes=bytes("test", "utf-8"),
         uris=["a", "b"],
-        transaction_nonce=42,
+        nonce=42,
         guardian=alice
     )
 

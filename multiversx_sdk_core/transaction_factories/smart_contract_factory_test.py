@@ -21,7 +21,7 @@ class TestSmartContract:
         args = [0]
 
         transaction = self.factory.create_deploy_transaction(
-            deployer=sender,
+            sender=sender,
             nonce=nonce,
             bytecode_path=contract,
             gas_limit=gas_limit,
@@ -49,7 +49,7 @@ class TestSmartContract:
 
         transaction = self.factory.create_execute_transaction(
             sender=sender,
-            contract_address=contract,
+            receiver=contract,
             function=function,
             gas_limit=gas_limit,
             nonce=nonce,
@@ -77,7 +77,7 @@ class TestSmartContract:
 
         transaction = self.factory.create_upgrade_transaction(
             sender=sender,
-            contract=contract_address,
+            receiver=contract_address,
             bytecode_path=contract,
             gas_limit=gas_limit,
             arguments=args,

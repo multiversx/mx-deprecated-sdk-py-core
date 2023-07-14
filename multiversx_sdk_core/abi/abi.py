@@ -1,6 +1,14 @@
 import json
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import (Any, Dict, List, Optional, Protocol, Union,
+                    runtime_checkable)
+
+INTEGER_MAX_NUM_BYTES = 128
+
+
+@runtime_checkable
+class IAddress(Protocol):
+    def pubkey(self) -> bytes: ...
 
 
 class TypeFormula:
@@ -230,6 +238,64 @@ class AbiRegistry:
             "endpoints": [endpoint.to_dict() for endpoint in self.endpoints],
             "types": [str(type) for type in self.types]
         }
+
+
+TYPES_NUMERICAL_UNSIGNED = ["u8", "u16", "u32", "u64", "BigUint"]
+TYPES_NUMERICAL_SIGNED = ["i8", "i16", "i32", "i64", "BigInt"]
+TYPES_NUMERICAL = TYPES_NUMERICAL_UNSIGNED + TYPES_NUMERICAL_SIGNED
+TYPE_BOOL = "bool"
+TYPE_BYTES = "bytes"
+TYPE_H256 = "H256"
+
+
+def encode_top_level(value: Any, type_formula: TypeFormula) -> bytes:
+    type_name: str = type_formula.name
+    type_parameters: List[TypeFormula] = type_formula.type_parameters
+
+    if type_name in TYPES_NUMERICAL:
+        return encode_top_level_numerical(value, type_name)
+    if type_name == TYPE_BOOL:
+        return encode_top_level_bool(value)
+    if type_name == TYPE_BYTES:
+        return encode_top_level_bytes(value)
+    if type_name == TYPE_H256:
+        return encode_top_level_h256(value)
+
+
+def encode_top_level_numerical(value: int, type_name: str) -> bytes:
+    assert isinstance(value, int)
+
+    if type_name in TYPES_NUMERICAL_UNSIGNED:
+        return value.to_bytes(INTEGER_MAX_NUM_BYTES, byteorder="big", signed=False).lstrip(bytes([0]))
+    if type_name in TYPES_NUMERICAL_SIGNED:
+        return value.to_bytes(INTEGER_MAX_NUM_BYTES, byteorder="big", signed=True).lstrip(bytes([0]))
+    raise Exception(f"Unsupported numerical type: {type_name}")
+
+
+def encode_top_level_bool(value: bool) -> bytes:
+    assert isinstance(value, bool)
+    return bytes([1 if value else 0])
+
+
+def encode_top_level_bytes(value: Union[bytes, str]) -> bytes:
+    assert isinstance(value, bytes) or isinstance(value, str)
+
+    if isinstance(value, bytes):
+        return value
+    return value.encode("utf-8")
+
+
+def encode_top_level_address(value: IAddress) -> bytes:
+    assert isinstance(value, IAddress)
+    return value.pubkey()
+
+
+def encode_top_level_h256(value: bytes) -> bytes:
+    assert isinstance(value, bytes)
+    assert len(value) == 32
+    return value
+
+# ["utf-8 string", new StringType()],
 
 
 if __name__ == "__main__":

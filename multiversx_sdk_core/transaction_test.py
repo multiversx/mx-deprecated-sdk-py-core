@@ -191,3 +191,19 @@ class TestTransaction:
 
         tx_hash = self.transaction_computer.compute_transaction_hash(transaction)
         assert tx_hash.hex() == "242022e9dcfa0ee1d8199b0043314dbda8601619f70069ebc441b9f03349a35c"
+
+    def test_sign_transaction_by_hash(self):
+        tx = Transaction(
+            sender="erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th",
+            receiver="erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx",
+            value=0,
+            gas_limit=50000,
+            version=2,
+            options=1,
+            chain_id="integration tests chain ID",
+            nonce=89
+        )
+        serialized = self.transaction_computer.compute_hash_for_signing(tx)
+        tx.signature = self.alice.secret_key.sign(serialized)
+
+        assert tx.signature.hex() == "f0c81f2393b1ec5972c813f817bae8daa00ade91c6f75ea604ab6a4d2797aca4378d783023ff98f1a02717fe4f24240cdfba0b674ee9abb18042203d713bc70a"

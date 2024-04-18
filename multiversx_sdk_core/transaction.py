@@ -4,6 +4,8 @@ from collections import OrderedDict
 from hashlib import blake2b
 from typing import Any, Dict, Optional, Protocol
 
+from Cryptodome.Hash import keccak
+
 from multiversx_sdk_core.constants import (DEFAULT_HRP, DIGEST_SIZE,
                                            TRANSACTION_MIN_GAS_PRICE,
                                            TRANSACTION_OPTIONS_DEFAULT,
@@ -86,6 +88,9 @@ class TransactionComputer:
         dictionary = self._to_dictionary(transaction)
         serialized = self._dict_to_json(dictionary)
         return serialized
+
+    def compute_hash_for_signing(self, transaction: ITransaction) -> bytes:
+        return keccak.new(digest_bits=256).update(self.compute_bytes_for_signing(transaction)).digest()
 
     def compute_transaction_hash(self, transaction: ITransaction) -> bytes:
         proto = ProtoSerializer()

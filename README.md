@@ -2,13 +2,9 @@
 
 This project will be deprecated in the near future. All the functionality has been moved to the new Python package. 
 
-The github repository can be found [here](https://github.com/multiversx/mx-sdk-py).
+The github repository for the new package can be found [here](https://github.com/multiversx/mx-sdk-py).
 
 The migration guide as a GitHub issue can be found [here](https://github.com/multiversx/mx-sdk-py/issues/41).
-
-The auto-generated documentation can be found [here](https://multiversx.github.io/mx-sdk-py/).
-
-The updated cookbook can be found [here](https://github.com/multiversx/mx-sdk-py/blob/main/examples/Cookbook.ipynb).
 
 # mx-sdk-py-core
 

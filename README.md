@@ -1,8 +1,6 @@
 [![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 
-This project will be deprecated in the near future. All the functionality has been moved to the new Python package. 
-
-The github repository for the new package can be found [here](https://github.com/multiversx/mx-sdk-py).
+This project will be deprecated in the near future. All the functionality has been moved to the new repo [here](https://github.com/multiversx/mx-sdk-py).
 
 The migration guide as a GitHub issue can be found [here](https://github.com/multiversx/mx-sdk-py/issues/41).
 

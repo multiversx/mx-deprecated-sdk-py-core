@@ -1,3 +1,5 @@
+import warnings
+
 from multiversx_sdk_core.account import AccountNonceHolder
 from multiversx_sdk_core.address import (Address, AddressComputer,
                                          AddressFactory)
@@ -10,6 +12,9 @@ from multiversx_sdk_core.tokens import (Token, TokenComputer,
                                         TokenIdentifierParts, TokenTransfer)
 from multiversx_sdk_core.transaction import Transaction, TransactionComputer
 from multiversx_sdk_core.transaction_payload import TransactionPayload
+
+warnings.warn('This package is deprecated and will no longer be maintained. Instead, please use "multiversx-sdk".')
+
 
 __all__ = [
     "AccountNonceHolder", "Address", "AddressFactory", "AddressComputer",
